@@ -27,7 +27,7 @@ class Questioner(unittest.TestCase):
         """getting all meetups"""
 
         response = self.client.get(
-            '/api/v1/meetups/upcoming', data=json.dumps(self.cart_items), content_type='application/json')
+            '/api/v1/meetups/upcoming', data=json.dumps(self.meetup_items), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     

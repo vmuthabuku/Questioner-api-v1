@@ -17,6 +17,14 @@ parser.add_argument('topic', type=str, required=True, help="quantity can only be
 parser.add_argument('happeningOn', required=True, help="Description cannot be blank")
 parser.add_argument('tags', required=True, help="tags cannot be blank")
 
+class get_meetups(Resource):
+    """This handles getting all available meetups"""
+    def get(self):
+        """This handles getting all available meetups"""
+        return {'data':meetups,
+                'status':200}, 200
+    
+
 
 class get_all(Resource):
 
@@ -24,10 +32,8 @@ class get_all(Resource):
     This class gets all questions and posts a question
     """
 
-    
-
     def post(self):
-        """This handles posting a product"""
+        """This handles posting a meetup"""
         data = parser.parse_args()
 
         id_count = 1
@@ -43,3 +49,4 @@ class get_all(Resource):
                 'status':201}, 201 
 
 api.add_resource(get_all, "/meetups")
+api.add_resource(get_meetups, "/meetups/upcoming")
