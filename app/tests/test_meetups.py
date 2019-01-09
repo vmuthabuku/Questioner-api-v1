@@ -30,6 +30,12 @@ class Questioner(unittest.TestCase):
             '/api/v1/meetups/upcoming', data=json.dumps(self.meetup_items), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
+    def test_get_specific_meetup(self):
+        """ getting a specific meetup"""
+        response = self.client.get(
+            '/api/v1/meetups/1', data=json.dumps(self.meetup_items), content_type='application/json')
+        self.assertEqual(response.status_code, 200) 
+
     
 
   
