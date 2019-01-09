@@ -54,8 +54,7 @@ class get_specific(Resource):
         check_id = validator.check_using_id(meetups,int(meetupid))
         if check_id:
             return check_id, 200
-        return {'message':'no such id',
-                'status':200}
+        return {'message':'no such id'}
 
 api.add_resource(get_all, "/meetups")
 api.add_resource(get_meetups, "/meetups/upcoming")
