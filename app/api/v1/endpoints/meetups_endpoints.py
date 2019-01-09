@@ -24,10 +24,7 @@ class get_all(Resource):
     This class gets all questions and posts a question
     """
 
-    def get(self):
-        """This handles getting all products in a cart"""
-        return {'data':meetups,
-                'status':200}, 200
+    
 
     def post(self):
         """This handles posting a product"""
