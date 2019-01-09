@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, jsonify, make_response
+from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
 from ..model.question_models import Question
 from ..common import validator
@@ -9,6 +9,7 @@ questions_print = Blueprint("question", __name__)
 api = Api(questions_print, prefix="/api/v1")
 
 questions=[]
+votes = []
 
 parser = reqparse.RequestParser()
 parser.add_argument('createdOn', required=True, help="createdOn cannot be blank!")
@@ -41,6 +42,35 @@ class Questions(Resource):
                 'data':new_item_dict,
                 'status':201}, 201 
 
+class get_specific(Resource):
+    """Get a specific question"""
+    parser = reqparse.RequestParser()
+    parser.add_argument('createdOn', required=True, help="createdOn cannot be blank!")
+    
+    @classmethod
+    def get(cls, questionid):
+        data = parser.parse_args
+        check_id = validator.check_using_id(questions,int(questionid))
+        if check_id:
+            return check_id, 200
+        return {'message':'no such id'}
+    @classmethod
+    def patch(self,questionid):
+        data = parser.parse_args
+        check_id = validator.check_using_id(questions,int(questionid))
+        if check_id:
+            return check_id, 200
+        return {'message':'no such id'}
+
+        
+
+       
+
+
+
+    
+
 api.add_resource(Questions, "/questions")
 #api.add_resource(get_meetups, "/meetups/upcoming")
-#api.add_resource(get_specific, "/meetups/<meetupid>/upvote")
+api.add_resource(get_specific, "/questions/<questionid>")
+api.add_resource(get_specific, "/questions/<questionid>")
