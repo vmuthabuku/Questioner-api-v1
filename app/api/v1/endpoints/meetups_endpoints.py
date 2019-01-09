@@ -47,6 +47,16 @@ class get_all(Resource):
         return {'message': 'Your item has been added successfully',
                 'data':new_item_dict,
                 'status':201}, 201 
+class get_specific(Resource):
+    """Get a specific question"""
+    @classmethod
+    def get(cls, meetupid):
+        check_id = validator.check_using_id(meetups,int(meetupid))
+        if check_id:
+            return check_id, 200
+        return {'message':'no such id',
+                'status':200}
 
 api.add_resource(get_all, "/meetups")
 api.add_resource(get_meetups, "/meetups/upcoming")
+api.add_resource(get_specific, "/meetups/<meetupid>")
