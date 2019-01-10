@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, jsonify, make_response
 from flask_restplus import Api,Resource,reqparse
-from ..model.meetup_models import Meetup
+from ..model.meetup_models import Meetup, Rsvp
 from ..common import validator
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ meetup_print = Blueprint("products", __name__)
 api = Api(meetup_print, prefix="/api/v1")
 
 meetups=[]
-rsvp = []
+rsvp=[]
 
 parser = reqparse.RequestParser()
 parser.add_argument('createdOn', required=True, help="Name cannot be blank!")
@@ -57,7 +57,6 @@ class get_specific(Resource):
             return check_id, 200
         return {'message':'no such id'}
 
-                
 
 
 
@@ -65,3 +64,4 @@ class get_specific(Resource):
 api.add_resource(get_all, "/meetups")
 api.add_resource(get_meetups, "/meetups/upcoming")
 api.add_resource(get_specific, "/meetups/<meetupid>")
+

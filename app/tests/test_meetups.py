@@ -13,6 +13,7 @@ class Questioner(unittest.TestCase):
         self.app = create_app("testing")
         self.client = self.app.test_client()
         self.meetup_items = {'createdOn': str( datetime.now() ), "location":"west", "topic":"java", "happeningOn":"12-2-2","tags":"jam"}
+        self.rsvp_items = {"meetupid":"1","status":"yes","topic":"android"}
 
 
     def test_post_item(self):
@@ -35,6 +36,13 @@ class Questioner(unittest.TestCase):
         response = self.client.get(
             '/api/v1/meetups/1', data=json.dumps(self.meetup_items), content_type='application/json')
         self.assertEqual(response.status_code, 200) 
+    
+    def test_rsvp(self):
+        """ test rsvp a meetup"""
+        response = self.client.post(
+            '/api/v1/meetups/1/rsvps', data=json.dumps(self.rsvp_items), content_type='application/json')
+        self.assertEqual(response.status_code, 201) 
+
 
     
 
