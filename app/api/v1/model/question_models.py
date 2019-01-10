@@ -23,11 +23,3 @@ class Question():
             item_id = item_id
         )
 
-    def make_dictionary(self, up_vote):
-        return dict (
-            up_vote = up_vote
-        )
-
-
-
-
