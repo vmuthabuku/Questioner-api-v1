@@ -54,22 +54,9 @@ class get_specific(Resource):
         if check_id:
             return check_id, 200
         return {'message':'no such id'}
-    @classmethod
-    def patch(self,questionid):
-        data = parser.parse_args
-        check_id = validator.check_using_id(questions,int(questionid))
-        if check_id:
-            return check_id, 200
-        return {'message':'no such id'}
-
+    #@classmethod
+    #def patch(self,questionid):
         
-
-       
-
-
-
-    
-
 api.add_resource(Questions, "/questions")
 #api.add_resource(get_meetups, "/meetups/upcoming")
 api.add_resource(get_specific, "/questions/<questionid>")
