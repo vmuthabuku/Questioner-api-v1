@@ -57,6 +57,17 @@ class get_specific(Resource):
             return check_id, 200
         return {'message':'no such id'}
 
+class Rsv(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('status')
+    parser.add_argument('topic')
+    def post(self,meetupid):
+        data = Rsv.parser.parse_args()
+        new = Rsvp(data['status'],data['topic'])
+        new_item = new.make_dic()
+        rsvp.append(new_item)
+        return{'status':rsvp,
+               'meetupid':meetupid},201
 
 
 
@@ -64,4 +75,4 @@ class get_specific(Resource):
 api.add_resource(get_all, "/meetups")
 api.add_resource(get_meetups, "/meetups/upcoming")
 api.add_resource(get_specific, "/meetups/<meetupid>")
-
+api.add_resource(Rsv, "/meetups/<meetupid>/rsvps")
