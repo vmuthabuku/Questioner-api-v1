@@ -47,7 +47,19 @@ class GetSpecific(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('upvote', required=True, help="votes cannot be blank!")
     
-    
+    @classmethod
+    def get(cls, questionid):
+        check_id = validator.check_using_id(questions,int(questionid))
+        if check_id:
+            return check_id, 200
+        return {'message':'no such id'}
+    @classmethod
+    def patch(self,questionid):
+        data = GetSpecific.parser.parse_args()
+        new = Votes(data['upvote'])
+        new_item = new.make_dictionary()
+        return{"votes":new_item,
+               'questionid':questionid}
 
         
 
