@@ -16,12 +16,19 @@ class Questioner(unittest.TestCase):
 
 
     def test_post_item(self):
-        """Testing posting product description."""
+        """Testing posting a meetup."""
 
         response = self.client.post(
             '/api/v1/meetups', data=json.dumps(self.meetup_items), content_type='application/json')
         res = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
+
+    def test_get_all_meetups(self):
+        """getting all meetups"""
+
+        response = self.client.get(
+            '/api/v1/meetups/upcoming', data=json.dumps(self.meetup_items), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
     
 
