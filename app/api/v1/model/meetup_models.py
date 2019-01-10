@@ -23,5 +23,13 @@ class Meetup():
             item_id = item_id
             
         )
-
+class Rsvp():
+    def __init__(self,status,topic):
+        self.status = status
+        self.topic = topic
+    def make_dic(self):
+        return dict (
+            status = self.status,
+            topic = self.topic
+        )
         
