@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
-from ..model.question_models import Question, Votes, DownVote
+from ..model.question_models import Question, Votes, Downvote
 from ..common import validator
 
 app = Flask(__name__)
@@ -42,7 +42,7 @@ class Questions(Resource):
                 'data':new_item_dict,
                 'status':201}, 201 
 
-class GetSpecific(Resource):
+class UpVote(Resource):
     """Get a specific question"""
     parser = reqparse.RequestParser()
     parser.add_argument('upvote', required=True, help="votes cannot be blank!")
@@ -55,8 +55,28 @@ class GetSpecific(Resource):
         return {'message':'no such id'}
     @classmethod
     def patch(self,questionid):
-        data = GetSpecific.parser.parse_args()
+        data = UpVote.parser.parse_args()
         new = Votes(data['upvote'])
+        new_item = new.make_dictionary()
+        return{"votes":new_item,
+               'questionid':questionid}
+
+class DownVote(Resource):
+    """Get a specific question"""
+    parser = reqparse.RequestParser()
+    parser.add_argument('downvote', required=True, help="votes cannot be blank!")
+
+    @classmethod
+    def get(cls, questionid):
+        check_id = validator.check_using_id(questions,int(questionid))
+        if check_id:
+            return check_id, 200
+        return {'message':'no such id'}
+    
+    @classmethod
+    def patch(self,questionid):
+        data = DownVote.parser.parse_args()
+        new = Downvote(data['downvote'])
         new_item = new.make_dictionary()
         return{"votes":new_item,
                'questionid':questionid}
@@ -65,5 +85,5 @@ class GetSpecific(Resource):
 
                 
 api.add_resource(Questions, "/questions")
-api.add_resource(GetSpecific, "/questions/<questionid>/upvote")
-#api.add_resource(GetSpecific, "/questions/<questionid>/downvote")
+api.add_resource(UpVote, "/questions/<questionid>/upvote")
+api.add_resource(DownVote, "/questions/<questionid>/downvote")
