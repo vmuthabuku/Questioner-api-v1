@@ -32,6 +32,16 @@ class Votes():
             upvote = self.upvote
         )
 
+class DownVote():
+    def __init__(self,downvote):
+        self.downvote = -1
+
+    def make_dictionary(self):
+        return dict (
+            upvote = self.downvote
+        )
+
+
 
 
 

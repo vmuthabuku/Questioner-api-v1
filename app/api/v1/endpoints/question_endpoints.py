@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
-from ..model.question_models import Question, Votes
+from ..model.question_models import Question, Votes, DownVote
 from ..common import validator
 
 app = Flask(__name__)
