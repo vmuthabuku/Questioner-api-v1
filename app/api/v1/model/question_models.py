@@ -23,3 +23,15 @@ class Question():
             item_id = item_id
         )
 
+class Votes():
+    def __init__(self,upvote):
+        self.upvote = +1
+
+    def make_dictionary(self):
+        return dict (
+            upvote = self.upvote
+        )
+
+
+
+
