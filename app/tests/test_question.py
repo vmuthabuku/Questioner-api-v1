@@ -11,7 +11,7 @@ class Questioner(unittest.TestCase):
         self.app = create_app("testing")
         self.client = self.app.test_client()
         self.question_items = {'createdOn': str( datetime.now() ), 'createdBy':'James', 'meetup':'Android', 'title':'feels','body':'vevev evree rver','votes':'0' }
-
+        self.upvote_items = {'upvote':'1','questionid':'1'}
     def test_post_question(self):
         """Testing posting a meetup."""
 
@@ -19,4 +19,14 @@ class Questioner(unittest.TestCase):
             '/api/v1/questions', data=json.dumps(self.question_items), content_type='application/json')
         res = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
+
+    def test_upvote(self):
+        response = self.client.patch(
+            '/api/v1/questions/1/upvote', data=json.dumps(self.upvote_items), content_type='application/json')
+        self.assertEqual(response.status_code, 200) 
+
+    
+
+
+    
 
