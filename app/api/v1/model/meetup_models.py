@@ -4,7 +4,7 @@ class Meetup():
     """This is the product model"""
 
     def __init__(self, createdOn, location, topic, happeningOn, tags):
-
+        """This is the meetup model"""
         self.createdOn = str( datetime.now() )
         self.location = location
         self.topic = topic

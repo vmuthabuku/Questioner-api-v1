@@ -9,6 +9,7 @@ meetup_print = Blueprint("products", __name__)
 api = Api(meetup_print, prefix="/api/v1")
 
 meetups=[]
+rsvp = []
 
 parser = reqparse.RequestParser()
 parser.add_argument('createdOn', required=True, help="Name cannot be blank!")
@@ -55,6 +56,11 @@ class get_specific(Resource):
         if check_id:
             return check_id, 200
         return {'message':'no such id'}
+
+                
+
+
+
 
 api.add_resource(get_all, "/meetups")
 api.add_resource(get_meetups, "/meetups/upcoming")

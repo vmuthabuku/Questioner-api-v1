@@ -1,6 +1,7 @@
 from flask import Flask
 from .instance.config import app_config
 from .api.v1.endpoints.meetups_endpoints import meetup_print
+from .api.v1.endpoints.question_endpoints import questions_print
 
 
 
@@ -12,5 +13,6 @@ def create_app(config):
     app.url_map.strict_slashes = False
 
     app.register_blueprint(meetup_print)
+    app.register_blueprint(questions_print)
 
     return app
