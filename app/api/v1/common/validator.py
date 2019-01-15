@@ -1,7 +1,7 @@
 def check_using_id(list_name, other_id):
     """use the relevant id to find item"""
 
-    my_item = next((item for item in list_name if item['item_id'] == other_id), None)
+    my_item = next((item for item in list_name if item['questionid'] == other_id), None)
 
     if my_item:
         return my_item
