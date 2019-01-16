@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
 from ..model.question_models import Question
 from ..common import validator
+from .meetups_endpoints import meetups
 
 app = Flask(__name__)
 
@@ -12,7 +13,6 @@ questions=[]
 
 parser = reqparse.RequestParser()
 parser.add_argument('createdBy', type=str, required=True, help="createdBy cannot be empty")
-parser.add_argument('meetup', type=str, required=True, help="meetup can only be an integer")
 parser.add_argument('title', required=True, help="title cannot be blank")
 parser.add_argument('body', required=True, help="body cannot be blank")
 
@@ -30,25 +30,25 @@ class Questions(Resource):
         """This handles posting a question"""
         data = parser.parse_args()
         createdBy = data.get('createdBy')
-        meetup = data.get('meetup')
         title = data.get('title')
         body = data.get('body')
 
-        for item in (data['createdBy'],data['meetup'],data['title'],data['body']):            
+        for item in (data['createdBy'],data['title'],data['body']):            
             if validator.check_empty(item):
                 return{'error':'cannot be empty {}'.format(item)},400
             
         
-        validate = validator.check_question_duplicate(questions,data['meetup'],data['title'])
+        validate = validator.check_question_duplicate(questions,data['title'])
         if validate:
             return {"message": validate}, 409
-                       
+
+        #m_id = meetups[0]['meetupid']                               
 
         id_count = 1
         for question in questions:
             id_count += 1
 
-        new_item = Question(data['createdBy'], data['meetup'], data['title'],data['body'])
+        new_item = Question(data['createdBy'], data['title'],data['body'])
         new_item_dict = new_item.make_dict(id_count)
 
         questions.append(new_item_dict)

@@ -65,7 +65,7 @@ class get_specific(Resource):
         check_id = validator.check_id(meetups,int(meetupid))
         if check_id:
             return check_id, 200
-        return {'error':'the id {} does not exist'.format(meetupid)}, 400
+        return {'error':'the id {} does not exist'.format(meetupid)}, 404
 
 class Rsv(Resource):
     """This handles to rsvp for a specific meetup"""
@@ -76,7 +76,7 @@ class Rsv(Resource):
         status = data.get('status')
         check_id = validator.check_id(meetups,int(meetupid))
         if not check_id:
-            return {'error':'the id {} does not exist'.format(meetupid)}, 400
+            return {'error':'the id {} does not exist'.format(meetupid)}, 404
         if status == "yes" or status == "no" or status ==  "maybe":
             new = Rsvp(data['status'])
             new_item = new.make_dic()

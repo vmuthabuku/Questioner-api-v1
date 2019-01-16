@@ -33,10 +33,8 @@ def check_question_blank(l_name,createdBy,meetup,title,body):
 
         
 
-def check_question_duplicate(l_name,meetup,title):
+def check_question_duplicate(l_name,title):
     for item in l_name:
-        if item["meetup"] == meetup:
-            return "The meetup name is already in use try something else"
         if item["title"] == title:
                return "The title name is already in use try something else"
 

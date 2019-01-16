@@ -10,10 +10,11 @@ class Questioner(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app("testing")
         self.client = self.app.test_client()
-        self.question_items = {'createdOn': str( datetime.now() ), 'createdBy':'James', 'meetup':'Android', 'title':'feels','body':'vevev evree rver','votes':'0' }
-        self.upvote_items = {'upvote':'3','questionid':'1'}
-        self.downvote_items = {'downvote':'1','questionid':'1'}
-        self.question_blank = {'createdOn': str( datetime.now() ),'createdBy':'James', 'meetup':'Android', 'title':'','body':'','votes':'0' }
+        self.question_items = {'createdBy':'James', 'title':'feels','body':'vevev evree rver' }
+        self.upvote_items = {'':''}
+        self.downvote_items = {'':''}
+        self.question_blank = {'createdBy':'James', 'title':'','body':'no title' }
+    
     def test_post_question(self):
         """Testing posting a meetup."""
 
@@ -27,10 +28,6 @@ class Questioner(unittest.TestCase):
             '/api/v1/questions/1/upvote', data=json.dumps(self.upvote_items), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
-    def test_downvote(self):
-        response = self.client.patch(
-            '/api/v1/questions/1/downvote', data=json.dumps(self.downvote_items), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
     
     def test_post_blank_question(self):
         """Testing posting a meetup."""
