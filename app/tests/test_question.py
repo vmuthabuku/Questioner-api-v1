@@ -24,6 +24,7 @@ class Questioner(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_upvote(self):
+        """ Testing the upvote functionality"""
         response = self.client.patch(
             '/api/v1/questions/1/upvote', data=json.dumps(self.upvote_items), content_type='application/json')
         self.assertEqual(response.status_code, 200)

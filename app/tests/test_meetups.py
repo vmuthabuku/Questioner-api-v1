@@ -34,14 +34,14 @@ class Questioner(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
     
     def test_blank_meetup(self):
-        """ Handles testing blank output """
+        """ Handles testing blank objects in a meetup"""
         response = self.client.post(
             '/api/v1/meetups', data=json.dumps(self.meetup_blank_item), content_type='application/json')
         self.assertEqual(response.status_code, 400) 
 
 
     def test_get_meetup_wrong_id(self):
-        """ getting a specific meetup"""
+        """ getting a wrong meetup id"""
         response = self.client.get(
             '/api/v1/meetups/1', data=json.dumps(self.meetup_item), content_type='application/json')
         self.assertEqual(response.status_code, 404) 
@@ -53,7 +53,7 @@ class Questioner(unittest.TestCase):
         self.assertEqual(response.status_code, 201) 
     
     def test_rsvp_wrong_status(self):
-        """ test rsvp a meetup"""
+        """ test rsvp with a wrong status"""
         response = self.client.post(
             '/api/v1/meetups/1/rsvps', data=json.dumps(self.rsvp_wrong_status), content_type='application/json')
         self.assertEqual(response.status_code, 400) 
