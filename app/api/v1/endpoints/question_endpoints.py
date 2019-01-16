@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
 from ..model.question_models import Question
 from ..common import validator
-from .meetups_endpoints import meetups
+from .meetups_endpoints import get_specific, meetups
 
 app = Flask(__name__)
 
@@ -26,35 +26,40 @@ class Questions(Resource):
         """get all questions"""
         return{"questions":questions}
 
-    def post(self):
+    def post(self,id):
         """This handles posting a question"""
         data = parser.parse_args()
+        print (data)
         createdBy = data.get('createdBy')
         title = data.get('title')
         body = data.get('body')
 
         for item in (data['createdBy'],data['title'],data['body']):            
             if validator.check_empty(item):
-                return{'error':'cannot be empty {}'.format(item)},400
-            
+                for index in data:
+                    if data[index] == item:
+                        return{'error':'The {} field cannot be empty'.format(index)},400
+        new_meetup = get_specific.duplicate(id)
+        if new_meetup:       
         
-        validate = validator.check_question_duplicate(questions,data['title'])
-        if validate:
-            return {"message": validate}, 409
+            validate = validator.check_question_duplicate(questions,data['title'])
+            if validate:
+                return {"message": validate}, 409                 
 
-        #m_id = meetups[0]['meetupid']                               
+            id_count = 1
+            for question in questions:
+                id_count += 1
 
-        id_count = 1
-        for question in questions:
-            id_count += 1
+            new_item = Question(data['createdBy'], data['title'],data['body'])
+            new_item_dict = new_item.make_dict(id_count)
 
-        new_item = Question(data['createdBy'], data['title'],data['body'])
-        new_item_dict = new_item.make_dict(id_count)
-
-        questions.append(new_item_dict)
-        return {'message': 'Your item has been added successfully',
-                'data':new_item_dict,
-                'status':201}, 201 
+            questions.append(new_item_dict)
+            return {'message': 'Your item has been added successfully',
+                    'data':new_item_dict,
+                    'status':201,
+                    'meetup':id
+                    }, 201 
+        return {"error":"the id {} does not exist".format(id)}, 404
 
 class UpVote(Resource):
     """This handles upvoting a specific question"""
@@ -94,7 +99,7 @@ class DownVote(Resource):
         
 
                 
-api.add_resource(Questions, "/questions")
+api.add_resource(Questions, "/meetups/<id>/questions")
 api.add_resource(UpVote, "/questions/<questionid>/upvote")
 api.add_resource(UpVote, "/questions/<questionid>")
 api.add_resource(DownVote, "/questions/<questionid>/downvote")

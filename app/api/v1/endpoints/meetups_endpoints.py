@@ -67,6 +67,12 @@ class get_specific(Resource):
             return check_id, 200
         return {'error':'the id {} does not exist'.format(meetupid)}, 404
 
+    @classmethod
+    def duplicate(cls, meetupid):
+        check_id = validator.check_id(meetups,int(meetupid))
+        if check_id:
+            return {'error':'the id {} does not exist'.format(meetupid)}, 404
+
 class Rsv(Resource):
     """This handles to rsvp for a specific meetup"""
     parser = reqparse.RequestParser()
@@ -74,6 +80,7 @@ class Rsv(Resource):
     def post(self,meetupid):
         data = Rsv.parser.parse_args()
         status = data.get('status')
+        
         check_id = validator.check_id(meetups,int(meetupid))
         if not check_id:
             return {'error':'the id {} does not exist'.format(meetupid)}, 404
@@ -83,7 +90,7 @@ class Rsv(Resource):
             rsvp.append(new_item)
             return{'status':new_item,
                 'meetupid':meetupid},201
-        return {"message":"There is no such status {}".format(status)}, 400                 
+        return {"message":"There is no such status {}".format(status)}, 400            
 
         
 
