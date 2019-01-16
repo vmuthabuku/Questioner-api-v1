@@ -12,8 +12,8 @@ class Questioner(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app("testing")
         self.client = self.app.test_client()
-        self.meetup_items = {'createdOn': str( datetime.now() ), "location":"west", "topic":"java", "happeningOn":"12-2-2","tags":"jam"}
-        self.rsvp_items = {"meetupid":"1","status":"yes","topic":"android"}
+        self.meetup_items = {'meetup':'accounts','createdOn': str( datetime.now() ), "location":"west", "topic":"java", "happeningOn":"12-2-2","tags":"jam"}
+        self.rsvp_items = {"meetupid":"1","status":"yes"}
 
 
     def test_post_item(self):

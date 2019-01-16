@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
-from ..model.question_models import Question, Votes, Downvote
+from ..model.question_models import Question
 from ..common import validator
 
 app = Flask(__name__)
@@ -9,32 +9,46 @@ questions_print = Blueprint("question", __name__)
 api = Api(questions_print, prefix="/api/v1")
 
 questions=[]
-votes = []
 
 parser = reqparse.RequestParser()
-parser.add_argument('createdOn', required=True, help="createdOn cannot be blank!")
-parser.add_argument('createdBy', type=str, required=True, help="createdBy can only be an integer")
+parser.add_argument('createdBy', type=str, required=True, help="createdBy cannot be empty")
 parser.add_argument('meetup', type=str, required=True, help="meetup can only be an integer")
 parser.add_argument('title', required=True, help="title cannot be blank")
 parser.add_argument('body', required=True, help="body cannot be blank")
-parser.add_argument('votes', required=True, help="votes cannot be blank")
-
 
 class Questions(Resource):
 
     """"
     This class gets all questions and posts a question
+
     """
+    def get(self):
+        """get all questions"""
+        return{"questions":questions}
 
     def post(self):
-        """This handles posting a meetup"""
+        """This handles posting a question"""
         data = parser.parse_args()
+        createdBy = data.get('createdBy')
+        meetup = data.get('meetup')
+        title = data.get('title')
+        body = data.get('body')
+
+        for item in (data['createdBy'],data['meetup'],data['title'],data['body']):            
+            if validator.check_empty(item):
+                return{'error':'cannot be empty {}'.format(item)},400
+            
+        
+        validate = validator.check_question_duplicate(questions,data['meetup'],data['title'])
+        if validate:
+            return {"message": validate}, 409
+                       
 
         id_count = 1
         for question in questions:
             id_count += 1
 
-        new_item = Question(data['createdOn'], data['createdBy'], data['meetup'], data['title'],data['body'],data['votes'])
+        new_item = Question(data['createdBy'], data['meetup'], data['title'],data['body'])
         new_item_dict = new_item.make_dict(id_count)
 
         questions.append(new_item_dict)
@@ -43,47 +57,44 @@ class Questions(Resource):
                 'status':201}, 201 
 
 class UpVote(Resource):
-    """Get a specific question"""
-    parser = reqparse.RequestParser()
-    parser.add_argument('upvote', required=True, help="votes cannot be blank!")
-    
+    """This handles upvoting a specific question"""
     @classmethod
     def get(cls, questionid):
+        """This handles getting a specific question"""
         check_id = validator.check_using_id(questions,int(questionid))
         if check_id:
             return check_id, 200
-        return {'message':'no such id'}
+        return {'error':'the id {} does not exist'.format(questionid)}, 400         
+
+    
     @classmethod
     def patch(self,questionid):
-        data = UpVote.parser.parse_args()
-        new = Votes(data['upvote'])
-        new_item = new.make_dictionary()
-        return{"votes":new_item,
-               'questionid':questionid}
+        check_id = validator.check_using_id(questions,int(questionid))
+        if not check_id:
+            return {'error':'the id {} does not exist'.format(questionid)}, 400   
+        q_db = questions[0]['upvote']+1
+        questions[0]['upvote'] = q_db      
+        return{"upvote":questions[0]['upvote'],
+               'questionid':questionid}, 200
+
+    
 
 class DownVote(Resource):
-    """Get a specific question"""
-    parser = reqparse.RequestParser()
-    parser.add_argument('downvote', required=True, help="votes cannot be blank!")
+    """This handles downvoting a specific question"""
 
-    @classmethod
-    def get(cls, questionid):
-        check_id = validator.check_using_id(questions,int(questionid))
-        if check_id:
-            return check_id, 200
-        return {'message':'no such id'}
-    
     @classmethod
     def patch(self,questionid):
-        data = DownVote.parser.parse_args()
-        new = Downvote(data['downvote'])
-        new_item = new.make_dictionary()
-        return{"votes":new_item,
-               'questionid':questionid}
-
+        check_id = validator.check_using_id(questions,int(questionid))
+        if not check_id:
+            return {'error':'the id {} does not exist'.format(questionid)}, 400   
+        q_db = questions[0]['downvote']+1
+        questions[0]['downvote'] = q_db      
+        return{"downvote":questions[0]['downvote'],
+               'questionid':questionid}, 200
         
 
                 
 api.add_resource(Questions, "/questions")
 api.add_resource(UpVote, "/questions/<questionid>/upvote")
+api.add_resource(UpVote, "/questions/<questionid>")
 api.add_resource(DownVote, "/questions/<questionid>/downvote")

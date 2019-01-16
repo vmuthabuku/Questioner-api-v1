@@ -3,7 +3,19 @@
 [![Coverage Status](https://coveralls.io/repos/github/vmuthabuku/Questioner-api-v1/badge.svg?branch=ch-addition-of-coveralls-163084088)](https://coveralls.io/github/vmuthabuku/Questioner-api-v1?branch=ch-addition-of-coveralls-163084088)
 
 # Questioner-api-v1
-Crowd-source questions for a meetup. Questioner helps the meetup organizer prioritize questions to be answered.
+Questioner-api-v1 is a platform where someone can crowd-source questions for a meetup. Questioner helps the meetup organizer prioritize questions to be answered.
+
+### The Questioner api should manage to:
+
+    - An admin should be able to create a meetup
+    - A user should be able to get all meetups
+    - A user should be able to get a specific meetup
+    - A user should be able to create a question
+    - A user should be able to get all questions
+    - A user should be able to get a specific question
+    - A user should be able to rsvp for a specific meetup
+    - A user should be able to upvote or downvote a question
+
 
 ### Running the app
 1. git clone the repo `https://github.com/vmuthabuku/Questioner-api-v1.git`
@@ -18,7 +30,10 @@ Crowd-source questions for a meetup. Questioner helps the meetup organizer prior
 
 ### Run tests
 
-in the terminal in the root directory of the folder run `pytest`
+1. git clone the repo `https://github.com/vmuthabuku/Questioner-api-v1.git`
+2. cd into the folder `Questioner-api-v1`
+3. move the root directory of the folder 
+4. run `pytest`
 
 ### Pivotal tracker stories 
 [Pivotal tracker](https://www.pivotaltracker.com/n/projects/2235282)
@@ -37,6 +52,8 @@ The api endpoints are
 | GET /meetups/meetupid | Fetch a single meetup record |
 | POST /meetups | create a meetup |
 | POST /questions | create a question |
+| GET /questions | get all questions |
+| GET /questions/questionid | get a specific questions |
 | POST /meetups/meetupid/rsvp | rsvp for a specific event |
 | PATCH/questions/questionid/upvote | upvote a question |
 | PATCH/questions/questionid/downvote | downvote a question |

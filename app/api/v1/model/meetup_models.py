@@ -1,35 +1,34 @@
 from datetime import datetime
 
 class Meetup():
-    """This is the product model"""
+    """This is the meetup model"""
 
-    def __init__(self, createdOn, location, topic, happeningOn, tags):
-        """This is the meetup model"""
-        self.createdOn = str( datetime.now() )
+    def __init__(self, location, topic, happeningOn, tags ):
         self.location = location
         self.topic = topic
         self.happeningOn = happeningOn
         self.tags = tags
 
 
-    def make_dict(self, item_id):
+    def make_dict(self, meetupid):
         """receives the item as an object and turns it to a dict"""
         return dict(
-            createdOn = self.createdOn,
+            createdOn = str( datetime.now() ),
             location = self.location,
             topic = self.topic,
             happeningOn = self.happeningOn,
             tags = self.tags,
-            item_id = item_id
+            meetup = meetupid
             
         )
 class Rsvp():
-    def __init__(self,status,topic):
+    """This is the rsvp model"""
+    def __init__(self,status):
         self.status = status
-        self.topic = topic
-    def make_dic(self):
+    def make_dic(self,meetupid):
+        """receives the item as an object and turns it to a dict"""
         return dict (
             status = self.status,
-            topic = self.topic
+            meetupid = meetupid
         )
         
