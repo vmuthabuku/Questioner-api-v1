@@ -38,9 +38,11 @@ class get_all(Resource):
         happeningOn = data.get('happeningOn')
         tags = data.get('tags')
 
-        for s in (data['location'],data['topic'],data['happeningOn'],data['tags']):            
-            if validator.check_empty(s):
-                return {'error':'value {} cannot be empty'.format(s)}, 400  
+        for item in (data['location'],data['topic'],data['happeningOn'],data['tags']):            
+            if validator.check_empty(item):
+                 for index in data:
+                        if data[index] == item:
+                            return{'error':'The {} field cannot be empty'.format(index)},400
         
         validate = validator.check_meetup_duplicate(meetups, data['topic'])
         if validate:

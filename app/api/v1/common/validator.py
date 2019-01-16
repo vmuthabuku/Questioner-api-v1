@@ -20,16 +20,6 @@ def check_empty(s):
     """ it handles checking for an empty string """
     if s.strip() == "":
         return "value cannot be empty"
-
-def check_question_blank(l_name,createdBy,meetup,title,body):
-    for item in l_name:
-        if item['createdBy'].strip() == "":
-            return "createdBy name cannot be empty"
-        if item['title'].strip() == "":
-            return "title name cannot be empty"
-        if item['body'].strip() == "":
-            return "body cannot be empty"
-
         
 
 def check_question_duplicate(l_name,title):
