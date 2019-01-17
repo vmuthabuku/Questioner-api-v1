@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.com/vmuthabuku/Questioner-api-v1.svg?branch=develop)]
 [![Coverage Status](https://coveralls.io/repos/github/vmuthabuku/Questioner-api-v1/badge.svg?branch=develop)](https://coveralls.io/github/vmuthabuku/Questioner-api-v1?branch=ch-addition-of-coveralls-163084088)
 [![Maintainability](https://api.codeclimate.com/v1/badges/aa526901c2bdce291ab8/maintainability)](https://codeclimate.com/github/vmuthabuku/Questioner-api-v1/maintainability)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15026be3425422d57a74)
 
 # Questioner-api-v1
 Questioner-api-v1 is a platform where someone can crowd-source questions for a meetup. Questioner helps the meetup organizer prioritize questions to be answered.
