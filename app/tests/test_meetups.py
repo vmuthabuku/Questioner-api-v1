@@ -14,6 +14,8 @@ class Questioner(unittest.TestCase):
         self.client = self.app.test_client()
         self.meetup_items = {"location":"west", "topic":"java", "happeningOn":"12-2-2","tags":"jam"}
         self.rsvp_items = {"meetupid":"1","status":"yes"}
+        self.rsvp_items_no = {"meetupid":"1","status":"no"}
+        self.rsvp_items_maybe = {"meetupid":"1","status":"maybe"}
         self.meetup_item = {"createdOn":"2019-01-16 01:25:17.491927","location":"west", "topic":"java", "happeningOn":"12-2-2","tags":"jam","meetupid":"1"}
         self.rsvp_wrong_status = {"meetupid":"1","status":"qww"}
         self.meetup_blank_item = {"location":"", "topic":"java", "happeningOn":"12-2-2","tags":"jam"}
@@ -63,6 +65,24 @@ class Questioner(unittest.TestCase):
         self.assertEqual(response.status_code, 201) 
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['status'], {'status': 'yes'})
+    
+     
+    def test_rsvp_no(self):
+        """ test rsvp a meetup"""
+        response = self.client.post(
+            '/api/v1/meetups/1/rsvps', data=json.dumps(self.rsvp_items_no), content_type='application/json')
+        self.assertEqual(response.status_code, 201) 
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], {'status': 'no'})
+
+     
+    def test_rsvp_maybe(self):
+        """ test rsvp a meetup"""
+        response = self.client.post(
+            '/api/v1/meetups/1/rsvps', data=json.dumps(self.rsvp_items_maybe), content_type='application/json')
+        self.assertEqual(response.status_code, 201) 
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], {'status': 'maybe'})
 
     
     def test_rsvp_wrong_status(self):

@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, jsonify, make_response, request
 from flask_restplus import Api,Resource,reqparse
 from ..model.question_models import Question
-from ..common import validator
+from ..utils import validator
 from .meetups_endpoints import get_specific, meetups
 
 app = Flask(__name__)

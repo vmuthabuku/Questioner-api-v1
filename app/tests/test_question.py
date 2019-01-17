@@ -15,6 +15,7 @@ class Questioner(unittest.TestCase):
         self.downvote_items = {'':''}
         self.question_blank = {'createdBy':'James', 'title':'','body':'no title' }
         self.question_blank_createdBy = {'createdBy':'', 'title':'ttrrtrt','body':'no title' }
+        self.question_blank_body = {'createdBy':'qww', 'title':'ttrrtrt','body':'' }
     
     def test_post_question(self):
         """Testing posting a meetup."""
@@ -54,13 +55,12 @@ class Questioner(unittest.TestCase):
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result['error'],'The title field cannot be empty')
-
     
-
-    
-
-    
-
-
-    
-
+    def test_post_blank_body(self):
+        """Testing posting a blank body"""
+        response = self.client.post(
+            '/api/v1/meetups/1/questions', data=json.dumps(self.question_blank_body), content_type='application/json')
+        res = json.loads(response.data.decode())
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(result['error'],'The body field cannot be empty')
