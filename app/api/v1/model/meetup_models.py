@@ -18,17 +18,17 @@ class Meetup():
             topic = self.topic,
             happeningOn = self.happeningOn,
             tags = self.tags,
-            meetup = meetupid
+            meetupid = meetupid
             
         )
 class Rsvp():
     """This is the rsvp model"""
     def __init__(self,status):
         self.status = status
-    def make_dic(self,meetupid):
+    def make_dic(self):
         """receives the item as an object and turns it to a dict"""
         return dict (
-            status = self.status,
-            meetupid = meetupid
+            status = self.status
+            
         )
         

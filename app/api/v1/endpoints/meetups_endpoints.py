@@ -38,9 +38,11 @@ class get_all(Resource):
         happeningOn = data.get('happeningOn')
         tags = data.get('tags')
 
-        for s in (data['location'],data['topic'],data['happeningOn'],data['tags']):            
-            if validator.check_empty(s):
-                return {'error':'value {} cannot be empty'.format(s)}, 400  
+        for item in (data['location'],data['topic'],data['happeningOn'],data['tags']):            
+            if validator.check_empty(item):
+                 for index in data:
+                        if data[index] == item:
+                            return{'error':'The {} field cannot be empty'.format(index)},400
         
         validate = validator.check_meetup_duplicate(meetups, data['topic'])
         if validate:
@@ -65,7 +67,13 @@ class get_specific(Resource):
         check_id = validator.check_id(meetups,int(meetupid))
         if check_id:
             return check_id, 200
-        return {'error':'the id {} does not exist'.format(meetupid)}, 400
+        return {'error':'the id {} does not exist'.format(meetupid)}, 404
+
+    @classmethod
+    def duplicate(cls, meetupid):
+        check_id = validator.check_id(meetups,int(meetupid))
+        if check_id:
+            return {'error':'the id {} does not exist'.format(meetupid)}, 404
 
 class Rsv(Resource):
     """This handles to rsvp for a specific meetup"""
@@ -74,16 +82,17 @@ class Rsv(Resource):
     def post(self,meetupid):
         data = Rsv.parser.parse_args()
         status = data.get('status')
+        
         check_id = validator.check_id(meetups,int(meetupid))
         if not check_id:
-            return {'error':'the id {} does not exist'.format(meetupid)}, 400
+            return {'error':'the id {} does not exist'.format(meetupid)}, 404
         if status == "yes" or status == "no" or status ==  "maybe":
             new = Rsvp(data['status'])
             new_item = new.make_dic()
             rsvp.append(new_item)
             return{'status':new_item,
                 'meetupid':meetupid},201
-        return {"message":"There is no such status {}".format(status)}, 400                 
+        return {"message":"There is no such status {}".format(status)}, 400            
 
         
 
