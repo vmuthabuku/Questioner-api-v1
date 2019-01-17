@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/vmuthabuku/Questioner-api-v1.svg?branch=ft-post-a-meetup-163052418)]
-[![Coverage Status](https://coveralls.io/repos/github/vmuthabuku/Questioner-api-v1/badge.svg?branch=ch-addition-of-coveralls-163084088)](https://coveralls.io/github/vmuthabuku/Questioner-api-v1?branch=ch-addition-of-coveralls-163084088)
+[![Build Status](https://travis-ci.com/vmuthabuku/Questioner-api-v1.svg?branch=develop)]
+[![Coverage Status](https://coveralls.io/repos/github/vmuthabuku/Questioner-api-v1/badge.svg?branch=develop)](https://coveralls.io/github/vmuthabuku/Questioner-api-v1?branch=ch-addition-of-coveralls-163084088)
 [![Maintainability](https://api.codeclimate.com/v1/badges/aa526901c2bdce291ab8/maintainability)](https://codeclimate.com/github/vmuthabuku/Questioner-api-v1/maintainability)
 
 # Questioner-api-v1
