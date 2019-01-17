@@ -29,22 +29,31 @@ class Questions(Resource):
     def post(self,id):
         """This handles posting a question"""
         data = parser.parse_args()
-        print (data)
         createdBy = data.get('createdBy')
         title = data.get('title')
         body = data.get('body')
+
+        try:
+            type(int(id)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400
+       
+        
 
         for item in (data['createdBy'],data['title'],data['body']):            
             if validator.check_empty(item):
                 for index in data:
                     if data[index] == item:
-                        return{'error':'The {} field cannot be empty'.format(index)},400
+                        return{'error':'The {} field cannot be empty'.format(index),
+                                'status':400},400
         new_meetup = get_specific.duplicate(id)
         if new_meetup:       
         
             validate = validator.check_question_duplicate(questions,data['title'])
             if validate:
-                return {"message": validate}, 409                 
+                return {"message": validate,
+                        'status':409}, 409                 
 
             id_count = 1
             for question in questions:
@@ -59,43 +68,76 @@ class Questions(Resource):
                     'status':201,
                     'meetup':id
                     }, 201 
-        return {"error":"the id {} does not exist".format(id)}, 404
+        return {"error":"the id {} does not exist".format(id),
+                'status':404}, 404
 
 class UpVote(Resource):
     """This handles upvoting a specific question"""
     @classmethod
     def get(cls, questionid):
         """This handles getting a specific question"""
+        try:
+            type(int(questionid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400  
         check_id = validator.check_using_id(questions,int(questionid))
         if check_id:
             return check_id, 200
-        return {'error':'the id {} does not exist'.format(questionid)}, 400         
+        return {'error':'the id {} does not exist'.format(questionid),
+                'status':400}, 400         
 
     
     @classmethod
     def patch(self,questionid):
+        try:
+            type(int(questionid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400  
         check_id = validator.check_using_id(questions,int(questionid))
         if not check_id:
-            return {'error':'the id {} does not exist'.format(questionid)}, 400   
+            return {'error':'the id {} does not exist'.format(questionid),
+                    'status':400}, 400   
         q_db = questions[0]['upvote']+1
-        questions[0]['upvote'] = q_db      
-        return{"upvote":questions[0]['upvote'],
-               'questionid':questionid}, 200
+        questions[0]['upvote'] = q_db  
+        data = [{
+           'meetup':questionid,
+           'topic':questions[0]['title'],
+           'downvote':questions[0]['downvote']
+        }]  
+        return{'values':data,
+               'upvote':questions[0]['upvote'],
+               'status': 200,
+               }, 200
 
-    
 
 class DownVote(Resource):
     """This handles downvoting a specific question"""
 
     @classmethod
     def patch(self,questionid):
+        try:
+            type(int(questionid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400  
         check_id = validator.check_using_id(questions,int(questionid))
         if not check_id:
-            return {'error':'the id {} does not exist'.format(questionid)}, 400   
+            return {'error':'the id {} does not exist'.format(questionid),
+                    'status':400}, 400 
         q_db = questions[0]['downvote']+1
-        questions[0]['downvote'] = q_db      
-        return{"downvote":questions[0]['downvote'],
-               'questionid':questionid}, 200
+        questions[0]['downvote'] = q_db    
+        data = [{
+            'meetup':questionid,
+            'topic':questions[0]['title'],
+            'upvote':questions[0]['upvote'],
+        }]  
+        return{
+
+            'values':data,
+            'downvote':questions[0]['downvote'],                
+            'status':200}, 200
         
 
                 

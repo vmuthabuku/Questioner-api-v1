@@ -34,6 +34,13 @@ def check_meetup_duplicate(l_name,topic):
          if item["topic"] == topic:
              return "The topic name is already in use"
 
+def check_url(url):
+    try:
+        type(int(url)) == int
+    except Exception as e:
+        return{"error":"status code can only be an integer"}, 400
+
+
 
 
 
