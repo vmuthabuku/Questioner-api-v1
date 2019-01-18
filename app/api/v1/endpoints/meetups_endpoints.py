@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, jsonify, make_response
 from flask_restplus import Api,Resource,reqparse
 from ..model.meetup_models import Meetup, Rsvp
-from ..common import validator
+from ..utils import validator
 
 app = Flask(__name__)
 
@@ -64,6 +64,11 @@ class get_specific(Resource):
     """Get a specific meetup"""
     @classmethod
     def get(cls, meetupid):
+        try:
+            type(int(meetupid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400
         check_id = validator.check_id(meetups,int(meetupid))
         if check_id:
             return check_id, 200
@@ -71,6 +76,11 @@ class get_specific(Resource):
 
     @classmethod
     def duplicate(cls, meetupid):
+        try:
+            type(int(meetupid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400
         check_id = validator.check_id(meetups,int(meetupid))
         if check_id:
             return {'error':'the id {} does not exist'.format(meetupid)}, 404
@@ -82,7 +92,18 @@ class Rsv(Resource):
     def post(self,meetupid):
         data = Rsv.parser.parse_args()
         status = data.get('status')
+
+        if validator.check_empty(data['status']):
+             for index in data:
+                        if data[index] == data['status']:
+                            return{'error':'The {} field cannot be empty'.format(index)},400
         
+        try:
+            type(int(meetupid)) == int
+        except Exception as e:
+            return{"error":"status code can only be an integer",
+                    'status':400}, 400    
+
         check_id = validator.check_id(meetups,int(meetupid))
         if not check_id:
             return {'error':'the id {} does not exist'.format(meetupid)}, 404
@@ -92,7 +113,7 @@ class Rsv(Resource):
             rsvp.append(new_item)
             return{'status':new_item,
                 'meetupid':meetupid},201
-        return {"message":"There is no such status {}".format(status)}, 400            
+        return {"error":"The status {} is invalid, The status can either be yes, no or maybe".format(status)}, 400            
 
         
 
